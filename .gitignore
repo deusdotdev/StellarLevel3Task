@@ -1,0 +1,13 @@
+/target
+/.soroban
+/.stellar
+**/*.wasm
+.DS_Store
+.env
+.env.local
+node_modules/
+dist/
+frontend/dist/
+coverage/
+*.log
+.vercel
