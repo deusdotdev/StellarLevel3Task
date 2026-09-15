@@ -1,14 +1,37 @@
 #![no_std]
 
-use cash::CashClient;
-use equity::EquityClient;
-use oracle::OracleClient;
 use soroban_sdk::{
-    contract, contracterror, contractevent, contractimpl, contracttype, Address, Env, Symbol,
+    contract, contractclient, contracterror, contractevent, contractimpl, contracttype, Address, Env,
+    Symbol,
 };
 
 pub const SCALE: i128 = 10_000_000;
 pub const DEFAULT_MAX_AGE: u64 = 3_600;
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PriceData {
+    pub price: i128,
+    pub timestamp: u64,
+    pub paused: bool,
+}
+
+#[contractclient(name = "CashClient")]
+pub trait CashTrait {
+    fn transfer(env: Env, from: Address, to: Address, amount: i128);
+    fn transfer_from(env: Env, spender: Address, from: Address, to: Address, amount: i128);
+}
+
+#[contractclient(name = "EquityClient")]
+pub trait EquityTrait {
+    fn mint(env: Env, to: Address, amount: i128);
+    fn desk_burn(env: Env, from: Address, amount: i128);
+}
+
+#[contractclient(name = "OracleClient")]
+pub trait OracleTrait {
+    fn last_price(env: Env, symbol: Symbol) -> PriceData;
+}
 
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
@@ -273,12 +296,12 @@ fn mul_div(raw: i128, price: i128) -> Result<i128, Error> {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use cash::Cash;
-    use equity::Equity;
-    use oracle::Oracle;
+    use super::{Desk, DeskClient, Error};
+    use cash::{Cash, CashClient};
+    use equity::{Equity, EquityClient};
+    use oracle::{Oracle, OracleClient};
     use soroban_sdk::testutils::{Address as _, Ledger};
-    use soroban_sdk::{symbol_short, String};
+    use soroban_sdk::{symbol_short, Address, Env, String, Symbol};
 
     struct Ctx {
         env: Env,

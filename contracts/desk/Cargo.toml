@@ -10,9 +10,6 @@ doctest = false
 
 [dependencies]
 soroban-sdk = { workspace = true }
-cash = { path = "../cash" }
-oracle = { path = "../oracle" }
-equity = { path = "../equity" }
 
 [dev-dependencies]
 soroban-sdk = { workspace = true, features = ["testutils"] }

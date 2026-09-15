@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+export CARGO_TARGET_DIR="$ROOT/target"
 
 NETWORK="${NETWORK:-testnet}"
 SOURCE="${SOURCE:-eqrail-admin}"
