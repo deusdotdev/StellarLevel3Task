@@ -1,0 +1,35 @@
+---
+description: Git commit identity — never attribute work to Cursor
+alwaysApply: true
+---
+
+# Git commits: no Cursor author
+
+Commits in this repo belong to the existing local Git identity (`user.name` / `user.email`). Do not change `git config`.
+
+When creating a commit:
+
+- Do **not** set `--author` to Cursor or any AI name
+- Do **not** set `GIT_AUTHOR_NAME`, `GIT_AUTHOR_EMAIL`, `GIT_COMMITTER_NAME`, or `GIT_COMMITTER_EMAIL` to Cursor
+- Do **not** add `Co-authored-by: Cursor`, `Co-authored-by: claude`, or any AI trailer
+- Do **not** put Cursor in the commit message body or sign-off
+
+```bash
+# ❌ BAD
+git commit --author="Cursor <cursor@cursor.com>" -m "..."
+git commit -m "$(cat <<'EOF'
+feat: add desk
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+EOF
+)"
+
+# ✅ GOOD — default local user only
+git commit -m "$(cat <<'EOF'
+feat: add desk mint/redeem flow
+
+EOF
+)"
+```
+
+If a hook injects a Cursor trailer, amend only when the commit is still local, created in this session, and unpushed; otherwise make a follow-up commit that does not repeat the trailer.
