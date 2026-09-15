@@ -506,6 +506,80 @@ export default function App() {
               >
                 Close window
               </button>
+              <button
+                disabled={!address || !ready || phase !== 'idle'}
+                className="rounded-xl border border-[#245c3a] py-3 disabled:opacity-40"
+                onClick={() =>
+                  void run('Oracle paused', async () => {
+                    const { hash: h } = await submitCall({
+                      source: address,
+                      contractId: CONTRACTS.oracle,
+                      method: 'set_paused',
+                      args: [symVal(symbol), boolVal(true)],
+                      onPhase: setPhase,
+                    })
+                    return h
+                  })
+                }
+              >
+                Pause {symbol} oracle
+              </button>
+              <button
+                disabled={!address || !ready || phase !== 'idle'}
+                className="rounded-xl border border-[#245c3a] py-3 disabled:opacity-40"
+                onClick={() =>
+                  void run('Oracle resumed', async () => {
+                    const { hash: h } = await submitCall({
+                      source: address,
+                      contractId: CONTRACTS.oracle,
+                      method: 'set_paused',
+                      args: [symVal(symbol), boolVal(false)],
+                      onPhase: setPhase,
+                    })
+                    return h
+                  })
+                }
+              >
+                Resume {symbol} oracle
+              </button>
+              <button
+                disabled={!address || !ready || phase !== 'idle'}
+                className="rounded-xl border border-[#245c3a] py-3 disabled:opacity-40"
+                onClick={() =>
+                  void run('Price printed', async () => {
+                    const next = (price ?? 150_0000000n) + 5_0000000n
+                    const { hash: h } = await submitCall({
+                      source: address,
+                      contractId: CONTRACTS.oracle,
+                      method: 'set_price',
+                      args: [symVal(symbol), i128Val(next)],
+                      onPhase: setPhase,
+                    })
+                    return h
+                  })
+                }
+              >
+                Bump {symbol} price +$5
+              </button>
+              <button
+                disabled={!address || !ready || phase !== 'idle'}
+                className="rounded-xl border border-[#245c3a] py-3 disabled:opacity-40"
+                onClick={() =>
+                  void run('Dividend multiplier applied', async () => {
+                    const next = (mult && mult > 0n ? mult : 10_000_000n) + 300_000n
+                    const { hash: h } = await submitCall({
+                      source: address,
+                      contractId: market.equityId,
+                      method: 'set_multiplier',
+                      args: [i128Val(next)],
+                      onPhase: setPhase,
+                    })
+                    return h
+                  })
+                }
+              >
+                Apply +3% dividend
+              </button>
             </div>
           </section>
         )}
