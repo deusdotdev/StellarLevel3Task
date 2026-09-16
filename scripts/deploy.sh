@@ -33,7 +33,7 @@ deploy() {
     --wasm "$WASM_DIR/$wasm" \
     --source "$SOURCE" \
     --network "$NETWORK" \
-    --alias "$alias"
+    --alias "$alias" | tee /dev/stderr | grep -E '^C[A-Z0-9]+$' | tail -n1
 }
 
 echo "Deploying…"
