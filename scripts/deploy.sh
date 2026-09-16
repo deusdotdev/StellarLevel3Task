@@ -33,7 +33,6 @@ deploy() {
     --wasm "$WASM_DIR/$wasm" \
     --source "$SOURCE" \
     --network "$NETWORK" \
-    --rpc-url "$RPC" \
     --alias "$alias"
 }
 
@@ -47,7 +46,7 @@ DESK="$(deploy desk.wasm eqrail-desk)"
 invoke() {
   local id="$1"
   shift
-  stellar contract invoke --id "$id" --source "$SOURCE" --network "$NETWORK" --rpc-url "$RPC" -- "$@"
+  stellar contract invoke --id "$id" --source "$SOURCE" --network "$NETWORK" -- "$@"
 }
 
 echo "Initializing…"
