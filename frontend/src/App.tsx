@@ -26,8 +26,9 @@ import {
 } from './lib/soroban'
 import { connectWallet, disconnectWallet, initWallet } from './lib/wallet'
 import { BeamsBackground } from '@/components/ui/beams-background'
+import { AnimatedNavFramer, type DeskTab } from '@/components/ui/animated-nav-framer'
 
-type Tab = 'trade' | 'book' | 'tape' | 'ops'
+type Tab = DeskTab
 
 const PHASE_COPY: Record<TxPhase, string> = {
   idle: '',
@@ -193,7 +194,9 @@ export default function App() {
         shares, not investment advice, not 1:1 anything in the real world.
       </div>
 
-      <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4">
+      <AnimatedNavFramer active={tab} onSelect={setTab} />
+
+      <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 pt-16 pb-4">
         <div>
           <p className="font-mono text-xs tracking-[0.2em] text-accent">EQRAIL</p>
           <h1 className="text-xl font-semibold text-white sm:text-2xl">
@@ -232,25 +235,6 @@ export default function App() {
             then copy IDs into <code className="text-accent">frontend/.env.local</code>.
           </p>
         )}
-
-        <nav className="mb-4 flex gap-1 overflow-x-auto rounded-full border border-line bg-glass p-1 text-sm">
-          {(
-            [
-              ['trade', 'Trade'],
-              ['book', 'Book'],
-              ['tape', 'Tape'],
-              ['ops', 'Ops'],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              className={`flex-1 rounded-full px-3 py-2 ${tab === id ? 'bg-accent/20 text-white' : 'text-mute'}`}
-              onClick={() => setTab(id)}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
 
         {error && (
           <p className="mb-3 rounded-lg border border-red-900 bg-red-950/60 p-3 text-sm text-red-200">
