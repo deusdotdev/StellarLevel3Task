@@ -4,6 +4,9 @@
 **/*.wasm
 .DS_Store
 .env
+.env.*
+!.env.example
+!**/.env.example
 .env.local
 node_modules/
 dist/
@@ -11,3 +14,4 @@ frontend/dist/
 coverage/
 *.log
 .vercel
+.cursor/
