@@ -4,12 +4,10 @@ import { motion, useMotionValueEvent, useScroll, type Variants } from 'motion/re
 import { Menu, Navigation } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export type DeskTab = 'explore' | 'tape' | 'ops'
+export type DeskTab = 'explore'
 
 const navItems: { name: string; id: DeskTab }[] = [
   { name: 'Explore', id: 'explore' },
-  { name: 'Tape', id: 'tape' },
-  { name: 'Ops', id: 'ops' },
 ]
 
 const EXPAND_SCROLL_THRESHOLD = 80

@@ -8,10 +8,10 @@ export function HomePage() {
           Stock on Stellar
         </h1>
         <Link
-          to="/s/AAPL"
+          to="/explore"
           className="inline-flex items-center rounded-2xl border border-white/10 bg-black/80 px-8 py-4 text-lg font-semibold text-white transition hover:bg-black"
         >
-          Open AAPL
+          Explore stocks
           <span className="ml-3">→</span>
         </Link>
       </div>

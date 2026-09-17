@@ -4,14 +4,10 @@ import { DeskProvider, useDesk } from '@/lib/desk-context'
 import { shortAddr } from '@/lib/format'
 import { ExplorePage } from '@/pages/Explore'
 import { HomePage } from '@/pages/Home'
-import { OpsPage } from '@/pages/Ops'
 import { StockPage } from '@/pages/Stock'
-import { TapePage } from '@/pages/Tape'
 
 function pathToTab(pathname: string): DeskTab | null {
   if (pathname === '/') return null
-  if (pathname.startsWith('/tape')) return 'tape'
-  if (pathname.startsWith('/ops')) return 'ops'
   return 'explore'
 }
 
@@ -38,10 +34,7 @@ function Shell() {
       <AnimatedNavFramer
         active={pathToTab(pathname)}
         onLogo={() => navigate('/')}
-        onSelect={(id) => {
-          if (id === 'explore') navigate('/explore')
-          else navigate(`/${id}`)
-        }}
+        onSelect={() => navigate('/explore')}
       />
 
       {isHome ? (
@@ -103,8 +96,6 @@ function Shell() {
             <Routes>
               <Route path="/explore" element={<ExplorePage />} />
               <Route path="/s/:ticker" element={<StockPage />} />
-              <Route path="/tape" element={<TapePage />} />
-              <Route path="/ops" element={<OpsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
