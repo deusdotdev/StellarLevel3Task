@@ -1,7 +1,6 @@
 import { useRef, useState, type MouseEvent } from 'react'
-import { createPortal } from 'react-dom'
 import { motion, useMotionValueEvent, useScroll, type Variants } from 'motion/react'
-import { Menu, Navigation } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export type DeskTab = 'explore'
@@ -30,7 +29,7 @@ const containerVariants: Variants = {
   collapsed: {
     y: 0,
     opacity: 1,
-    width: '3rem',
+    width: '2.75rem',
     transition: {
       type: 'spring',
       damping: 20,
@@ -40,16 +39,6 @@ const containerVariants: Variants = {
       staggerDirection: -1,
     },
   },
-}
-
-const logoVariants: Variants = {
-  expanded: {
-    opacity: 1,
-    x: 0,
-    rotate: 0,
-    transition: { type: 'spring', damping: 15 },
-  },
-  collapsed: { opacity: 0, x: -25, rotate: -180, transition: { duration: 0.3 } },
 }
 
 const itemVariants: Variants = {
@@ -79,11 +68,9 @@ const collapsedIconVariants: Variants = {
 export function AnimatedNavFramer({
   active,
   onSelect,
-  onLogo,
 }: {
   active: DeskTab | null
   onSelect: (tab: DeskTab) => void
-  onLogo: () => void
 }) {
   const [isExpanded, setExpanded] = useState(true)
   const { scrollY } = useScroll()
@@ -114,70 +101,52 @@ export function AnimatedNavFramer({
     }
   }
 
-  return createPortal(
-    <div className="fixed top-16 left-1/2 z-50 -translate-x-1/2">
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={isExpanded ? 'expanded' : 'collapsed'}
-        variants={containerVariants}
-        whileHover={!isExpanded ? { scale: 1.1 } : undefined}
-        whileTap={!isExpanded ? { scale: 0.95 } : undefined}
-        onClick={handleNavClick}
+  return (
+    <motion.nav
+      initial={{ opacity: 0, y: -6 }}
+      animate={isExpanded ? 'expanded' : 'collapsed'}
+      variants={containerVariants}
+      whileHover={!isExpanded ? { scale: 1.04 } : undefined}
+      whileTap={!isExpanded ? { scale: 0.97 } : undefined}
+      onClick={handleNavClick}
+      className={cn(
+        'relative flex h-9 items-center overflow-hidden rounded-full border border-line/70 bg-glass shadow-md shadow-black/30 backdrop-blur-sm',
+        !isExpanded && 'cursor-pointer justify-center',
+      )}
+    >
+      <motion.div
         className={cn(
-          'flex h-12 items-center overflow-hidden rounded-full border border-line bg-glass shadow-lg shadow-black/40 backdrop-blur-sm',
-          !isExpanded && 'cursor-pointer justify-center',
+          'flex items-center gap-0.5 px-1 sm:gap-1 sm:px-2',
+          !isExpanded && 'pointer-events-none',
         )}
       >
-        <motion.button
-          type="button"
-          variants={logoVariants}
-          onClick={(e) => {
-            e.stopPropagation()
-            onLogo()
-          }}
-          className="flex flex-shrink-0 items-center gap-1.5 pr-2 pl-4 font-semibold text-accent"
-        >
-          <Navigation className="h-5 w-5" />
-          <span className="font-mono text-xs tracking-[0.14em]">SoS</span>
-        </motion.button>
-
-        <motion.div
-          className={cn(
-            'flex items-center gap-1 pr-4 sm:gap-2',
-            !isExpanded && 'pointer-events-none',
-          )}
-        >
-          {navItems.map((item) => (
-            <motion.button
-              key={item.id}
-              type="button"
-              variants={itemVariants}
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelect(item.id)
-              }}
-              className={cn(
-                'rounded-full px-2 py-1 text-sm font-medium transition-colors',
-                active === item.id
-                  ? 'text-accent'
-                  : 'text-mute hover:text-fog',
-              )}
-            >
-              {item.name}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <motion.div
-            variants={collapsedIconVariants}
-            animate={isExpanded ? 'expanded' : 'collapsed'}
+        {navItems.map((item) => (
+          <motion.button
+            key={item.id}
+            type="button"
+            variants={itemVariants}
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelect(item.id)
+            }}
+            className={cn(
+              'rounded-full px-3 py-1 text-sm font-medium transition-colors',
+              active === item.id ? 'text-accent' : 'text-mute hover:text-fog',
+            )}
           >
-            <Menu className="h-6 w-6 text-fog" />
-          </motion.div>
-        </div>
-      </motion.nav>
-    </div>,
-    document.body,
+            {item.name}
+          </motion.button>
+        ))}
+      </motion.div>
+
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <motion.div
+          variants={collapsedIconVariants}
+          animate={isExpanded ? 'expanded' : 'collapsed'}
+        >
+          <Menu className="h-4 w-4 text-fog" />
+        </motion.div>
+      </div>
+    </motion.nav>
   )
 }

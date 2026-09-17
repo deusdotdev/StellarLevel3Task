@@ -4,7 +4,7 @@ import { SilkBackground } from '@/components/ui/silk-background-animation'
 export function HomePage() {
   return (
     <SilkBackground className="min-h-[calc(100svh-2.75rem)]">
-      <div className="flex min-h-[calc(100svh-2.75rem)] items-center justify-center px-4 pt-28 pb-16 text-center">
+      <div className="flex min-h-[calc(100svh-2.75rem)] items-center justify-center px-4 pb-16 text-center">
         <div className="max-w-4xl">
           <p className="mb-4 font-mono text-xs tracking-[0.35em] text-accent/80 uppercase">
             Testnet mock equities

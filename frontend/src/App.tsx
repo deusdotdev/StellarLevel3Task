@@ -31,75 +31,83 @@ function Shell() {
         shares, not investment advice, not 1:1 anything in the real world.
       </div>
 
-      <AnimatedNavFramer
-        active={pathToTab(pathname)}
-        onLogo={() => navigate('/')}
-        onSelect={() => navigate('/explore')}
-      />
+      <header className="sticky top-0 z-50 border-b border-line/50 bg-ink/90 backdrop-blur-md">
+        <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-2.5 sm:px-6">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="justify-self-start font-mono text-[11px] tracking-[0.22em] text-accent transition hover:text-white sm:text-xs"
+          >
+            STOCK ON STELLAR
+          </button>
 
-      {isHome ? (
-        <HomePage />
-      ) : (
-        <>
-          <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-16 pb-4 sm:px-6">
-            <div>
-              <p className="font-mono text-xs tracking-[0.2em] text-accent">
-                STOCK ON STELLAR
-              </p>
-              <h1 className="text-xl font-semibold text-white sm:text-2xl">
-                Mock tokenized names
-              </h1>
-            </div>
+          {!isHome ? (
+            <AnimatedNavFramer
+              active={pathToTab(pathname)}
+              onSelect={() => navigate('/explore')}
+            />
+          ) : (
+            <span />
+          )}
+
+          <div className="flex items-center justify-self-end">
             {address ? (
               <div className="flex items-center gap-2">
-                <span className="rounded-full border border-line bg-glass px-3 py-1 font-mono text-xs">
+                <span className="rounded-full border border-line bg-glass px-2.5 py-1 font-mono text-[11px] sm:px-3 sm:text-xs">
                   {shortAddr(address)}
                 </span>
-                <button className="text-xs text-accent underline" onClick={() => void onDisconnect()}>
+                <button
+                  className="text-[11px] text-accent underline sm:text-xs"
+                  onClick={() => void onDisconnect()}
+                >
                   Disconnect
                 </button>
               </div>
             ) : (
               <button
-                className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-on-accent"
+                className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-on-accent sm:px-4 sm:py-2 sm:text-sm"
                 onClick={() => void onConnect()}
               >
                 Connect wallet
               </button>
             )}
-          </header>
+          </div>
+        </div>
+      </header>
 
-          <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-6 sm:pb-12">
-            {error && (
-              <p className="mb-3 rounded-lg border border-red-900 bg-red-950/60 p-3 text-sm text-red-200">
-                {error}
-              </p>
-            )}
-            {notice && (
-              <p className="mb-3 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm text-accent">
-                {notice}
-                {hash && hash !== 'friendbot' && (
-                  <>
-                    {' '}
-                    <a
-                      className="underline"
-                      href={`https://stellar.expert/explorer/testnet/tx/${hash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {shortAddr(hash)}
-                    </a>
-                  </>
-                )}
-              </p>
-            )}
-            <Routes>
-              <Route path="/explore" element={<ExplorePage />} />
-              <Route path="/s/:ticker" element={<StockPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-        </>
+      {isHome ? (
+        <HomePage />
+      ) : (
+        <main className="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:px-6 sm:pb-12">
+          {error && (
+            <p className="mb-3 rounded-lg border border-red-900 bg-red-950/60 p-3 text-sm text-red-200">
+              {error}
+            </p>
+          )}
+          {notice && (
+            <p className="mb-3 rounded-lg border border-accent/30 bg-accent/10 p-3 text-sm text-accent">
+              {notice}
+              {hash && hash !== 'friendbot' && (
+                <>
+                  {' '}
+                  <a
+                    className="underline"
+                    href={`https://stellar.expert/explorer/testnet/tx/${hash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {shortAddr(hash)}
+                  </a>
+                </>
+              )}
+            </p>
+          )}
+          <Routes>
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/s/:ticker" element={<StockPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
       )}
     </div>
   )
