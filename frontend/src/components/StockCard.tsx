@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { formatUsd } from '@/lib/format'
 import { isListed, type Stock } from '@/lib/stocks'
 import { Sparkline } from '@/components/Sparkline'
+import { StockLogo } from '@/components/StockLogo'
 import { cn } from '@/lib/utils'
 
 export function StockCard({ stock, livePrice }: { stock: Stock; livePrice?: bigint | null }) {
@@ -18,9 +19,7 @@ export function StockCard({ stock, livePrice }: { stock: Stock; livePrice?: bigi
 
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-accent/20 bg-accent/10 font-mono text-xs font-semibold text-accent">
-            {stock.ticker.slice(0, 2)}
-          </div>
+          <StockLogo stock={stock} />
           <div>
             <p className="font-mono text-sm text-accent">${stock.ticker}</p>
             <p className="text-sm text-fog">{stock.name}</p>
