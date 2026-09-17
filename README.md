@@ -56,6 +56,13 @@ chmod +x scripts/deploy.sh
 
 The script signs with a **local stellar-cli identity** (default: `deployer` if it exists). That account is the issuer/admin. It deploys cash, oracle, desk, and ten equity contracts, lists each market, prints a mock price, and writes public IDs to `deployments/testnet.env` and `frontend/.env.local`.
 
+If mint/redeem fails with **stale oracle**, re-print prices (desk allows ~1h by default; use `SET_DESK_MAX_AGE=86400` for 24h):
+
+```bash
+chmod +x scripts/refresh-prices.sh
+./scripts/refresh-prices.sh
+```
+
 **Do not put an `S…` secret in `.env` / `VITE_*`.** Vite bakes those into the browser bundle. `.env` is only for public RPC URLs and contract IDs. The signing key stays in `~/.config/stellar/identity/`. Users of the dApp always sign in Freighter with *their* wallet.
 
 ### Frontend
