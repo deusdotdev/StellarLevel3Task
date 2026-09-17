@@ -26,11 +26,6 @@ function Shell() {
 
   return (
     <div className="min-h-svh bg-ink text-fog">
-      <div className="relative z-40 border-b border-line bg-warn px-4 py-2 text-center text-[13px] font-medium text-on-warn">
-        Testnet simulation. These tokens are fictional mocks of well-known names — not
-        shares, not investment advice, not 1:1 anything in the real world.
-      </div>
-
       <header className="sticky top-0 z-50 border-b border-line/50 bg-ink/90 backdrop-blur-md">
         <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-4 py-2.5 sm:px-6">
           <button
