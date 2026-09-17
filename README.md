@@ -1,19 +1,19 @@
 # EQRail
 
-**Stellar Testnet primary desk for fictional equity rails.**
+**Stellar Testnet desk for mock tokenized stocks.**
 
-This is not a security, not investment advice, and not a claim on Apple, Nvidia, or any other issuer. `EQ-ALPHA` and `EQ-INDEX` are mock instruments used to demonstrate mint/redeem, oracles, corporate-action multipliers, and contract-to-contract calls on Soroban.
+This is not a security, not investment advice, and not a claim on Apple, Nvidia, or any other issuer. Tickers like `AAPL` and `NVDA` are **testnet mocks we issued** so you can buy and sell against mUSD. They are not 1:1 anything in the real world.
 
 EQRail is a Level 3 (Orange Belt) style dApp: advanced contracts, tests, CI, deployment workflow, and a mobile-first UI — not a licensed brokerage.
 
 ## Why this exists
 
-Robinhood-style stock tokens are a **custody + issuer + ERC-20** stack. EQRail copies only the *rail*:
+Robinhood-style stock tokens are a **custody + issuer + trading** stack. EQRail copies the *rail* on Testnet:
 
-1. Authorized primary mint/redeem against mock USD
-2. Per-symbol oracle with pause + staleness
-3. Raw balances that do not rebase; a `multiplier` represents reinvested dividends
-4. A desk contract that is the sole minter of equity tokens
+1. We act as the mock issuer: ten well-known names, clearly labeled as fakes
+2. Buy / sell against mock USD at an oracle print (primary desk, DEX-style UI)
+3. Per-symbol oracle with pause + staleness
+4. Raw balances that do not rebase; a `multiplier` represents reinvested dividends
 
 Real US equities on Stellar belong to regulated issuers / DTCC (planned). This repo is the application layer you can actually ship on Testnet today.
 
@@ -29,7 +29,7 @@ Frontend (Vite + React)
 Desk  ──requires_fresh──►  Oracle
     │                         │
     ├── transfer_from ──►  Cash (mUSD)
-    └── mint / desk_burn ► Equity (ALPHA, INDEX)
+    └── mint / desk_burn ► Equity (AAPL, NVDA, …)
 ```
 
 | Contract | Role |
@@ -50,10 +50,13 @@ Needs Rust, `wasm32v1-none`, and [stellar-cli](https://developers.stellar.org/do
 ```bash
 cargo test --workspace
 chmod +x scripts/deploy.sh
+# Uses your stellar-cli identity. Prefer an existing `deployer` key; override with SOURCE=mywallet.
 ./scripts/deploy.sh
 ```
 
-The script funds a `eqrail-admin` Testnet identity, deploys all four crates (equity twice), initializes markets at $150 / $80, and writes `frontend/.env.local`.
+The script signs with a **local stellar-cli identity** (default: `deployer` if it exists). That account is the issuer/admin. It deploys cash, oracle, desk, and ten equity contracts, lists each market, prints a mock price, and writes public IDs to `deployments/testnet.env` and `frontend/.env.local`.
+
+**Do not put an `S…` secret in `.env` / `VITE_*`.** Vite bakes those into the browser bundle. `.env` is only for public RPC URLs and contract IDs. The signing key stays in `~/.config/stellar/identity/`. Users of the dApp always sign in Freighter with *their* wallet; Ops admin works if that Freighter account is the same G-address as `VITE_ADMIN`.
 
 ### Frontend
 
@@ -74,26 +77,34 @@ Live IDs from `deployments/testnet.env` (Stellar Testnet):
 
 | Role | Contract / account |
 | --- | --- |
-| Admin | [`GD2JGQMG5FHPKRDAWZ6IIBOY4YMJIB6P45SKWYAXJD2Q4F276ZTWJHZ3`](https://stellar.expert/explorer/testnet/account/GD2JGQMG5FHPKRDAWZ6IIBOY4YMJIB6P45SKWYAXJD2Q4F276ZTWJHZ3) |
-| Cash (mUSD) | [`CCCAYANBTYRKHOH77NVFTM4SVOWPG7N2OVTGXB37FFXMGVI4N3HSM3QP`](https://stellar.expert/explorer/testnet/contract/CCCAYANBTYRKHOH77NVFTM4SVOWPG7N2OVTGXB37FFXMGVI4N3HSM3QP) |
-| Oracle | [`CDOUCPSNA2FHUGDDWOVDCVKIKZYE577R5J5BVUBCF7JU6KS5IS36M5AM`](https://stellar.expert/explorer/testnet/contract/CDOUCPSNA2FHUGDDWOVDCVKIKZYE577R5J5BVUBCF7JU6KS5IS36M5AM) |
-| EQ-ALPHA | [`CCYOTLGRDYZPFVDYJZ774AZVO46BUART5FHHIVH5NRQO5LWNAGUIRPRL`](https://stellar.expert/explorer/testnet/contract/CCYOTLGRDYZPFVDYJZ774AZVO46BUART5FHHIVH5NRQO5LWNAGUIRPRL) |
-| EQ-INDEX | [`CBYNGXZKN3OUR4EIMXKQFSBNHLWB7A53G2O6O5P77QSK2ITMB4RHF5TG`](https://stellar.expert/explorer/testnet/contract/CBYNGXZKN3OUR4EIMXKQFSBNHLWB7A53G2O6O5P77QSK2ITMB4RHF5TG) |
-| Desk | [`CDED4QZZYSDYMFCVARIUI6E36OX5DIJ7CNTFFTCB4I4IOCMEW57VRAO2`](https://stellar.expert/explorer/testnet/contract/CDED4QZZYSDYMFCVARIUI6E36OX5DIJ7CNTFFTCB4I4IOCMEW57VRAO2) |
+| Admin (`deployer`) | [`GB5X3MNSH7I5LV7BZO6I3FM4ZHMDTPCGREM74PG6BNHKDNCSXNYAV2K6`](https://stellar.expert/explorer/testnet/account/GB5X3MNSH7I5LV7BZO6I3FM4ZHMDTPCGREM74PG6BNHKDNCSXNYAV2K6) |
+| Cash (mUSD) | [`CC36NOCR33FDXIXBLPFUQQWUY4ERIUQF55MDEXHLCYRMX4Q6WB2GNNK6`](https://stellar.expert/explorer/testnet/contract/CC36NOCR33FDXIXBLPFUQQWUY4ERIUQF55MDEXHLCYRMX4Q6WB2GNNK6) |
+| Oracle | [`CBFXXTF5VDAGNEPMRNQX3NTQVBIIZDRGB54PWY3MQMNORCRPOBOM3E5O`](https://stellar.expert/explorer/testnet/contract/CBFXXTF5VDAGNEPMRNQX3NTQVBIIZDRGB54PWY3MQMNORCRPOBOM3E5O) |
+| Desk | [`CBTWWTXK2DRZFDDWYSVTDX7SAUPEPD35QLCBPXFZLG74RZNYYPY63LB2`](https://stellar.expert/explorer/testnet/contract/CBTWWTXK2DRZFDDWYSVTDX7SAUPEPD35QLCBPXFZLG74RZNYYPY63LB2) |
+| AAPL | [`CC6CCBAJVMXUXUCQ6UNWPIQMNYB2N6SND7SU7FFLICZ3M4DBQXHK3OY5`](https://stellar.expert/explorer/testnet/contract/CC6CCBAJVMXUXUCQ6UNWPIQMNYB2N6SND7SU7FFLICZ3M4DBQXHK3OY5) |
+| NVDA | [`CCIK5YNQ4OBGQYHKSM3Y3PNLHOVOHXLXABJA3D3P7RWWCVUYFBRBYK4E`](https://stellar.expert/explorer/testnet/contract/CCIK5YNQ4OBGQYHKSM3Y3PNLHOVOHXLXABJA3D3P7RWWCVUYFBRBYK4E) |
+| GOOGL | [`CCDINJSZE4DAOMLIIYJQ5JSCKEJZYVYKMJMLS4ZUWBFCJTUOT3IHS3KC`](https://stellar.expert/explorer/testnet/contract/CCDINJSZE4DAOMLIIYJQ5JSCKEJZYVYKMJMLS4ZUWBFCJTUOT3IHS3KC) |
+| MSFT | [`CBPZUJGOV7FRQK7QGJ5KFSLLXWOW4N7KTHYW7Y6SPTGQPVFR56AOMMKO`](https://stellar.expert/explorer/testnet/contract/CBPZUJGOV7FRQK7QGJ5KFSLLXWOW4N7KTHYW7Y6SPTGQPVFR56AOMMKO) |
+| AMZN | [`CB5EMXF6GGQCHYNTEJJRJOX3MUVM55SB5B5VKYW5WQRQEEXCJ6DOLXPZ`](https://stellar.expert/explorer/testnet/contract/CB5EMXF6GGQCHYNTEJJRJOX3MUVM55SB5B5VKYW5WQRQEEXCJ6DOLXPZ) |
+| META | [`CBTSMQDYGX2HIOGJ43BU2W2IGFRDF4RTBIYPGM3YXK5EIYETQG6RHYJ3`](https://stellar.expert/explorer/testnet/contract/CBTSMQDYGX2HIOGJ43BU2W2IGFRDF4RTBIYPGM3YXK5EIYETQG6RHYJ3) |
+| TSLA | [`CAYQLNVGZ6JSA4WSP4CKUZKWIEQY5RRDADXFAEW7466AZI3UFJ4ECQND`](https://stellar.expert/explorer/testnet/contract/CAYQLNVGZ6JSA4WSP4CKUZKWIEQY5RRDADXFAEW7466AZI3UFJ4ECQND) |
+| AVGO | [`CBDNMY3IOD63AGGNBH2AK3YORMEMCT3JOHNLWSPKDRIGOFDZVFHB3W4J`](https://stellar.expert/explorer/testnet/contract/CBDNMY3IOD63AGGNBH2AK3YORMEMCT3JOHNLWSPKDRIGOFDZVFHB3W4J) |
+| JPM | [`CCVIXE34WW4MEKEVX5Q7QBYOW2WRLTJ3NQU2NMKSWSNRMGIM5SW3NF7D`](https://stellar.expert/explorer/testnet/contract/CCVIXE34WW4MEKEVX5Q7QBYOW2WRLTJ3NQU2NMKSWSNRMGIM5SW3NF7D) |
+| LLY | [`CDKGMBTNWCH7K5BFB3WJQY46BQJS7FWFOMHS2IWTDEA3EAEMTUGHE42I`](https://stellar.expert/explorer/testnet/contract/CDKGMBTNWCH7K5BFB3WJQY46BQJS7FWFOMHS2IWTDEA3EAEMTUGHE42I) |
 
-Contract interactions (Stellar Expert):
+Contract interactions (Stellar Expert, signed by `deployer`):
 
-- [Mint 1 ALPHA](https://stellar.expert/explorer/testnet/tx/4becf2bffa118158e31a379064931d0a5e98b7ddad99f2fc2e1c4b4c40f93185) — desk pulls 150 mUSD, credits raw `10000000`
-- [Redeem 0.2 ALPHA](https://stellar.expert/explorer/testnet/tx/5be9c139f30bd372ac7ceac407c0eb72f5422bbaed701ad11e01ac30bce67528) — burns equity, pays out 30 mUSD
-- [Faucet](https://stellar.expert/explorer/testnet/tx/7d9f295116570ed1c88873ed679ba6ba91c511ebef5e3ea0810a804b34b70cf7) / [approve desk](https://stellar.expert/explorer/testnet/tx/7e96d1deae95fe9dcef6eeddbf7f14c95f8b7e5ee881e55260cd74fac88ff4e6)
-- Init: [list ALPHA](https://stellar.expert/explorer/testnet/tx/ced1b04a59a041b62d9f6d07b0d0d958d845886a72e38e023bde1a820ab79a94), [list INDEX](https://stellar.expert/explorer/testnet/tx/b0f0d078c7609fcf89cabf9be2c32daa017d0b002b05f6ad0e7238fa41bdecce), [price ALPHA](https://stellar.expert/explorer/testnet/tx/e9aed505b83dcf47df9627b76cb168f850ccd738466072277d2673eeb7e1dce3), [price INDEX](https://stellar.expert/explorer/testnet/tx/03b4b3a201512fed3ae3dad272a39081aaa681d41b0eaa33a2c5a57adf31e841)
+- [Mint 1 AAPL](https://stellar.expert/explorer/testnet/tx/99a1477d77c61a401583403d5dec1c4b90c96d8c396f5a426f2ffc0e045867ff) — desk pulls 227 mUSD, credits raw `10000000`
+- [Redeem 0.2 AAPL](https://stellar.expert/explorer/testnet/tx/921c5ac44900d85cdc36264a8d52865ae1c48d3507432059c3a7b1c8a8d5c651) — burns equity, pays out 45.4 mUSD
+- [Faucet](https://stellar.expert/explorer/testnet/tx/3c794f89045accda708d7b649f3f2e278696c9435c90b5b8ed5f16287f6de07d) / [approve desk](https://stellar.expert/explorer/testnet/tx/18a86d457e3623b2c17e0f233ef8dfe87a3e47eb20b977f3d0a68ea563842b54)
+- [Price AAPL $227](https://stellar.expert/explorer/testnet/tx/4f85141960fd251057cf4a0e2f1197168024bc8c9705e365cf71e411abba54f7)
 
 ## User flow
 
 1. Connect wallet
 2. Friendbot for fee XLM
 3. Faucet 10,000 mUSD
-4. Buy (mint) `ALPHA` — desk pulls mUSD at the oracle price
+4. Buy (mint) a listed ticker such as `AAPL` — desk pulls mUSD at the oracle price
 5. Watch the tape (contract events)
 6. Optional: Ops tab closes the primary window (mint then fails with a mapped error)
 7. Redeem back to mUSD
