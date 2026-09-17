@@ -101,13 +101,14 @@ Contract interactions (Stellar Expert, signed by `deployer`):
 
 ## User flow
 
-1. Connect wallet
-2. Friendbot for fee XLM
-3. Faucet 10,000 mUSD
-4. Buy (mint) a listed ticker such as `AAPL` — desk pulls mUSD at the oracle price
-5. Watch the tape (contract events)
-6. Optional: Ops tab closes the primary window (mint then fails with a mapped error)
-7. Redeem back to mUSD
+1. Land on Stock on Stellar, then Explore the listed names or open a ticker
+2. Connect wallet
+3. Friendbot for fee XLM
+4. Faucet 10,000 mUSD
+5. Buy (mint) a listed ticker such as `AAPL` — desk pulls mUSD at the oracle price
+6. Watch the tape (contract events)
+7. Optional: Ops tab closes the primary window (mint then fails with a mapped error)
+8. Redeem back to mUSD
 
 Loading states: simulate → sign → submit → confirm. Contract errors `#6` window, `#7` paused, `#8` stale are mapped to plain language.
 

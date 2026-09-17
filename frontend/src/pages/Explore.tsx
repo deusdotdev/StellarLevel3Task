@@ -18,7 +18,8 @@ export function ExplorePage() {
   return (
     <section>
       <div className="mb-6">
-        <p className="max-w-2xl text-sm text-mute">
+        <h1 className="text-3xl font-semibold tracking-tight text-white">Explore</h1>
+        <p className="mt-2 max-w-2xl text-sm text-mute">
           Ten mock equity tokens we issued on Stellar Testnet. Not Apple, Nvidia, or any
           real security — buy and sell against testnet mUSD at the desk oracle.
         </p>

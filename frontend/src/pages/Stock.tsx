@@ -94,7 +94,7 @@ export function StockPage() {
     return (ui * price) / 10_000_000n
   }, [price, ui])
 
-  if (!stock) return <Navigate to="/" replace />
+  if (!stock) return <Navigate to="/explore" replace />
 
   const displayPrice = price ?? stock.mockPrice
 
@@ -103,7 +103,7 @@ export function StockPage() {
   return (
     <section className="grid gap-4 lg:grid-cols-[1.35fr_0.9fr]">
       <div className="space-y-4">
-        <Link to="/" className="text-xs text-accent underline">
+        <Link to="/explore" className="text-xs text-accent underline">
           ← Explore
         </Link>
         <MarketSnapshotCard

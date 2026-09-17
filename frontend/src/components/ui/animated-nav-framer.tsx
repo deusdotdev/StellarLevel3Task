@@ -81,9 +81,11 @@ const collapsedIconVariants: Variants = {
 export function AnimatedNavFramer({
   active,
   onSelect,
+  onLogo,
 }: {
-  active: DeskTab
+  active: DeskTab | null
   onSelect: (tab: DeskTab) => void
+  onLogo: () => void
 }) {
   const [isExpanded, setExpanded] = useState(true)
   const { scrollY } = useScroll()
@@ -128,13 +130,18 @@ export function AnimatedNavFramer({
           !isExpanded && 'cursor-pointer justify-center',
         )}
       >
-        <motion.div
+        <motion.button
+          type="button"
           variants={logoVariants}
+          onClick={(e) => {
+            e.stopPropagation()
+            onLogo()
+          }}
           className="flex flex-shrink-0 items-center gap-1.5 pr-2 pl-4 font-semibold text-accent"
         >
           <Navigation className="h-5 w-5" />
           <span className="font-mono text-xs tracking-[0.14em]">SoS</span>
-        </motion.div>
+        </motion.button>
 
         <motion.div
           className={cn(
