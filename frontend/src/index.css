@@ -15,6 +15,14 @@
 
 :root {
   color-scheme: dark;
+  --foreground: #dbe7f6;
+  --muted-foreground: #8ea0bc;
+  --card: rgb(8 16 36 / 0.72);
+  --chart-1: #489ffa;
+  --chart-2: #4dbe95;
+  --chart-3: #c27c58;
+  --chart-4: #e9ec89;
+  --chart-5: #c88fcf;
 }
 
 html,

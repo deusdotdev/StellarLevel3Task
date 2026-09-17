@@ -1,4 +1,4 @@
-# EQRail frontend
+# Stock on Stellar frontend
 
 Vite + React UI for the Testnet desk. See the [root README](../README.md) for architecture and deploy.
 

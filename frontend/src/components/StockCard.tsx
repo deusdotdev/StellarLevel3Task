@@ -35,7 +35,10 @@ export function StockCard({ stock, livePrice }: { stock: Stock; livePrice?: bigi
         </span>
       </div>
       <div className="mt-4 text-accent">
-        <Sparkline ticker={stock.ticker} />
+        <Sparkline
+          ticker={stock.ticker}
+          lastPrice={Number(price) / 10_000_000}
+        />
       </div>
       <div className="mt-3 flex items-end justify-between">
         <p className="font-mono text-lg text-white">{formatUsd(price)}</p>

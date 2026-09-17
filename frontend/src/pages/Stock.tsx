@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { CONTRACTS } from '@/lib/config'
 import { formatQty, formatUsd, shortAddr, toStroops } from '@/lib/format'
 import { getStock, isListed } from '@/lib/stocks'
-import { Sparkline } from '@/components/Sparkline'
+import { MarketSnapshotCard } from '@/components/ui/market-snapshot'
 import {
   PHASE_COPY,
   addrVal,
@@ -98,29 +98,25 @@ export function StockPage() {
 
   const displayPrice = price ?? stock.mockPrice
 
+  const lastDollars = Number(displayPrice) / 10_000_000
+
   return (
     <section className="grid gap-4 lg:grid-cols-[1.35fr_0.9fr]">
-      <div className="rounded-2xl border border-line bg-glass p-4">
+      <div className="space-y-4">
         <Link to="/" className="text-xs text-accent underline">
           ← Explore
         </Link>
-        <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="font-mono text-sm text-accent">${stock.ticker}</p>
-            <h1 className="text-2xl font-semibold text-white">{stock.name}</h1>
-            <p className="mt-1 text-xs text-mute">
-              Testnet mock. Not a claim on {stock.name.replace(' Inc.', '').replace(' Corp.', '')}.
-            </p>
-          </div>
-          <p className="font-mono text-3xl text-white">{formatUsd(displayPrice)}</p>
-        </div>
-        <div className="mt-6 text-accent">
-          <Sparkline ticker={stock.ticker} className="h-32" />
-          <p className="mt-2 text-center text-[11px] text-mute">
-            Chart placeholder — swap in the real graph next.
-          </p>
-        </div>
-        <dl className="mt-4 grid grid-cols-2 gap-2 text-xs text-mute sm:grid-cols-4">
+        <MarketSnapshotCard
+          name={stock.name}
+          ticker={stock.ticker}
+          lastPrice={lastDollars}
+          venue="TESTNET · mUSD"
+          className="max-w-none"
+        />
+        <p className="px-1 text-xs text-mute">
+          Testnet mock. Not a claim on {stock.name.replace(' Inc.', '').replace(' Corp.', '')}.
+        </p>
+        <dl className="grid grid-cols-2 gap-2 rounded-2xl border border-line bg-glass p-4 text-xs text-mute sm:grid-cols-4">
           <div>
             <dt>Window</dt>
             <dd className="text-fog">

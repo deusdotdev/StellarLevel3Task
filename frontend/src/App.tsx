@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
-import { BeamsBackground } from '@/components/ui/beams-background'
 import { AnimatedNavFramer, type DeskTab } from '@/components/ui/animated-nav-framer'
+import { BackgroundPaths, PathHero } from '@/components/ui/background-paths'
 import { DeskProvider, useDesk } from '@/lib/desk-context'
 import { shortAddr } from '@/lib/format'
 import { ExplorePage } from '@/pages/Explore'
@@ -14,6 +14,16 @@ function pathToTab(pathname: string): DeskTab {
   return 'explore'
 }
 
+function heroFor(pathname: string): { title: string; compact: boolean } {
+  if (pathname.startsWith('/tape')) return { title: 'The Tape', compact: true }
+  if (pathname.startsWith('/ops')) return { title: 'Desk Ops', compact: true }
+  if (pathname.startsWith('/s/')) {
+    const ticker = pathname.split('/')[2] ?? 'AAPL'
+    return { title: ticker, compact: true }
+  }
+  return { title: 'Stock on Stellar', compact: false }
+}
+
 function Shell() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -25,9 +35,10 @@ function Shell() {
     notice,
     hash,
   } = useDesk()
+  const hero = heroFor(pathname)
 
   return (
-    <BeamsBackground className="bg-ink" intensity="strong">
+    <BackgroundPaths>
       <div className="min-h-svh text-fog">
         <div className="border-b border-line bg-warn px-4 py-2 text-center text-[13px] font-medium text-on-warn">
           Testnet simulation. These tokens are fictional mocks of well-known names — not
@@ -42,13 +53,7 @@ function Shell() {
           }}
         />
 
-        <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 pt-16 pb-4">
-          <div>
-            <p className="font-mono text-xs tracking-[0.2em] text-accent">EQRAIL</p>
-            <h1 className="text-xl font-semibold text-white sm:text-2xl">
-              Mock equity desk
-            </h1>
-          </div>
+        <header className="mx-auto flex max-w-5xl justify-end px-4 pt-16 pb-2">
           {address ? (
             <div className="flex items-center gap-2">
               <span className="rounded-full border border-line bg-glass px-3 py-1 font-mono text-xs">
@@ -67,6 +72,14 @@ function Shell() {
             </button>
           )}
         </header>
+
+        <PathHero
+          key={hero.title}
+          title={hero.title}
+          compact={hero.compact}
+          ctaLabel="Trade AAPL"
+          ctaTo="/s/AAPL"
+        />
 
         <main className="mx-auto max-w-5xl px-4 pb-28 sm:pb-12">
           {error && (
@@ -101,7 +114,7 @@ function Shell() {
           </Routes>
         </main>
       </div>
-    </BeamsBackground>
+    </BackgroundPaths>
   )
 }
 

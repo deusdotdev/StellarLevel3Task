@@ -1,14 +1,14 @@
-# EQRail
+# Stock on Stellar
 
 **Stellar Testnet desk for mock tokenized stocks.**
 
 This is not a security, not investment advice, and not a claim on Apple, Nvidia, or any other issuer. Tickers like `AAPL` and `NVDA` are **testnet mocks we issued** so you can buy and sell against mUSD. They are not 1:1 anything in the real world.
 
-EQRail is a Level 3 (Orange Belt) style dApp: advanced contracts, tests, CI, deployment workflow, and a mobile-first UI — not a licensed brokerage.
+Stock on Stellar is a Level 3 (Orange Belt) style dApp: advanced contracts, tests, CI, deployment workflow, and a mobile-first UI — not a licensed brokerage.
 
 ## Why this exists
 
-Robinhood-style stock tokens are a **custody + issuer + trading** stack. EQRail copies the *rail* on Testnet:
+Robinhood-style stock tokens are a **custody + issuer + trading** stack. Stock on Stellar copies the *rail* on Testnet:
 
 1. We act as the mock issuer: ten well-known names, clearly labeled as fakes
 2. Buy / sell against mock USD at an oracle print (primary desk, DEX-style UI)
@@ -135,4 +135,4 @@ CI (GitHub Actions) runs both plus a wasm build and `npm run build`.
 
 ## Disclaimer
 
-EQRail tokens are **testnet mocks**. Do not market them as stock. Do not deploy ticker-named clones to Mainnet as if they were real equities.
+Stock on Stellar tokens are **testnet mocks**. Do not market them as stock. Do not deploy ticker-named clones to Mainnet as if they were real equities.

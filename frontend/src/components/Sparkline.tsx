@@ -1,27 +1,31 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { mockPriceSeries } from '@/components/ui/market-snapshot'
 
 export function Sparkline({
   ticker,
+  lastPrice,
   className,
 }: {
   ticker: string
+  lastPrice?: number
   className?: string
 }) {
   const d = useMemo(() => {
-    const seed = ticker.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+    const last = lastPrice && lastPrice > 0 ? lastPrice : 100
+    const data = mockPriceSeries(ticker, last)
     const w = 160
     const h = 48
-    const pts: string[] = []
-    let y = h * 0.55
-    for (let i = 0; i < 24; i++) {
-      y += Math.sin(seed / 7 + i * 0.55) * 4.2 + ((seed + i * 3) % 5) - 2
-      y = Math.min(h - 4, Math.max(4, y))
-      const x = (i / 23) * w
-      pts.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`)
-    }
-    return pts.join(' ')
-  }, [ticker])
+    const min = Math.min(...data) * 0.97
+    const max = Math.max(...data) * 1.02
+    return data
+      .map((v, i) => {
+        const x = (i / (data.length - 1)) * w
+        const y = 4 + (1 - (v - min) / (max - min || 1)) * (h - 8)
+        return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`
+      })
+      .join(' ')
+  }, [lastPrice, ticker])
 
   return (
     <svg
@@ -32,7 +36,7 @@ export function Sparkline({
       <path
         d={d}
         fill="none"
-        stroke="currentColor"
+        stroke="var(--chart-2, #4dbe95)"
         strokeWidth="1.8"
         strokeLinecap="round"
       />
