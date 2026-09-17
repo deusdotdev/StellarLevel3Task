@@ -41,7 +41,7 @@ function Shell() {
         <HomePage />
       ) : (
         <>
-          <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 pt-16 pb-4">
+          <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-16 pb-4 sm:px-6">
             <div>
               <p className="font-mono text-xs tracking-[0.2em] text-accent">
                 STOCK ON STELLAR
@@ -69,7 +69,7 @@ function Shell() {
             )}
           </header>
 
-          <main className="mx-auto max-w-5xl px-4 pb-28 sm:pb-12">
+          <main className="mx-auto max-w-6xl px-4 pb-28 sm:px-6 sm:pb-12">
             {error && (
               <p className="mb-3 rounded-lg border border-red-900 bg-red-950/60 p-3 text-sm text-red-200">
                 {error}
