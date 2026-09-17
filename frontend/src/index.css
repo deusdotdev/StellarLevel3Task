@@ -4,11 +4,11 @@
   --color-ink: #05070d;
   --color-fog: #dbe7f6;
   --color-mute: #8ea0bc;
-  --color-accent: #7dd3fc;
-  --color-accent-dim: #38bdf8;
-  --color-on-accent: #04131f;
+  --color-accent: #489ffa;
+  --color-accent-dim: #3a84e0;
+  --color-on-accent: #04101f;
   --color-glass: rgb(8 16 36 / 0.32);
-  --color-line: rgb(125 211 252 / 0.22);
+  --color-line: rgb(72 159 250 / 0.22);
   --color-warn: #c2410c;
   --color-on-warn: #fff7ed;
 }

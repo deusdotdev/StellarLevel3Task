@@ -11,7 +11,7 @@ export function HomePage() {
           </p>
           <h1
             className="mb-4 text-5xl font-semibold tracking-tighter text-white sm:text-7xl md:text-8xl"
-            style={{ textShadow: '0 0 48px rgba(125, 211, 252, 0.12)' }}
+            style={{ textShadow: '0 0 48px rgba(72, 159, 250, 0.14)' }}
           >
             Stock on Stellar
           </h1>

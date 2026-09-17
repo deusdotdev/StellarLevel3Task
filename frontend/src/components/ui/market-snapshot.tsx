@@ -57,6 +57,7 @@ export type MarketSnapshotCardProps = {
   lastPrice?: number
   values?: number[]
   venue?: string
+  showHeader?: boolean
   className?: string
 }
 
@@ -66,6 +67,7 @@ export function MarketSnapshotCard({
   lastPrice,
   values,
   venue = 'TESTNET · mUSD',
+  showHeader = true,
   className,
 }: MarketSnapshotCardProps) {
   const reduced = useReducedMotion()
@@ -97,7 +99,7 @@ export function MarketSnapshotCard({
   const price = data[active]
   const delta = price - data[0]
   const pct = (delta / data[0]) * 100
-  const stroke = delta >= 0 ? CHART.green : CHART.amber
+  const stroke = delta >= 0 ? CHART.blue : CHART.amber
   const updated = useMemo(
     () =>
       new Date().toLocaleTimeString('en-US', {
@@ -137,40 +139,52 @@ export function MarketSnapshotCard({
   return (
     <div
       className={cn(
-        'w-full max-w-[340px] overflow-hidden rounded-lg border',
+        'w-full max-w-[340px] overflow-hidden rounded-2xl border',
         className,
       )}
       style={{ background: SURFACE, borderColor: HAIRLINE, fontFamily: SANS }}
     >
-      <div className="flex items-start justify-between px-5 pb-2 pt-5">
-        <div>
-          <p className="text-[11px] font-medium" style={{ color: TEXT_MUTED }}>
-            {name}
-          </p>
-          <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-1 tabular-nums">
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.span
-                key={price.toFixed(2)}
-                className="text-[22px] font-semibold tracking-[-0.035em]"
-                style={{ color: TEXT }}
-                initial={reduced ? false : { opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-              >
-                ${price.toFixed(2)}
-              </motion.span>
-            </AnimatePresence>
-            <span className="text-[11px] font-semibold" style={{ color: stroke }}>
-              {delta >= 0 ? '+' : ''}
-              {delta.toFixed(2)} ({pct >= 0 ? '+' : ''}
-              {pct.toFixed(2)}%)
+      <div className="px-5 pb-2 pt-5">
+        {showHeader && (
+          <div className="flex items-start justify-between">
+            <p className="text-[11px] font-medium" style={{ color: TEXT_MUTED }}>
+              {name}
+            </p>
+            <span className="text-[12px] font-semibold" style={{ color: TEXT }}>
+              {ticker}
             </span>
           </div>
+        )}
+        <div
+          className={cn(
+            'flex flex-wrap items-baseline gap-x-2 gap-y-1 tabular-nums',
+            showHeader && 'mt-1.5',
+          )}
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={price.toFixed(2)}
+              className="text-[22px] font-semibold tracking-[-0.035em]"
+              style={{ color: TEXT }}
+              initial={reduced ? false : { opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+            >
+              ${price.toFixed(2)}
+            </motion.span>
+          </AnimatePresence>
+          <span className="text-[11px] font-semibold" style={{ color: stroke }}>
+            {delta >= 0 ? '+' : ''}
+            {delta.toFixed(2)} ({pct >= 0 ? '+' : ''}
+            {pct.toFixed(2)}%)
+          </span>
         </div>
-        <span className="text-[12px] font-semibold" style={{ color: TEXT }}>
-          {ticker}
-        </span>
+        {hover != null && (
+          <p className="mt-1 text-[10px] tabular-nums" style={{ color: TEXT_MUTED }}>
+            {hoverStamp(active)} · ${price.toFixed(2)}
+          </p>
+        )}
       </div>
 
       <div className="relative px-3">
@@ -237,7 +251,7 @@ export function MarketSnapshotCard({
             }}
             role="status"
           >
-            {hoverStamp(active)}
+            {hoverStamp(active)} · ${price.toFixed(2)}
           </div>
         )}
       </div>
