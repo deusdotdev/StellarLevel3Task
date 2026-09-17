@@ -52,19 +52,19 @@ function Shell() {
 
           <div className="flex items-center justify-self-end">
             {address ? (
-              <div className="flex items-center gap-2">
-                <span className="rounded-full border border-line bg-glass px-2.5 py-1 font-mono text-[11px] sm:px-3 sm:text-xs">
-                  {shortAddr(address)}
-                </span>
-                <button
-                  className="text-[11px] text-accent underline sm:text-xs"
-                  onClick={() => void onDisconnect()}
-                >
-                  Disconnect
-                </button>
-              </div>
+              <button
+                type="button"
+                title="Disconnect wallet"
+                onClick={() => void onDisconnect()}
+                className="inline-flex items-center gap-2 rounded-full border border-accent/35 bg-accent/10 px-3 py-1.5 text-xs transition hover:border-accent/50 hover:bg-accent/15 sm:px-4 sm:py-2 sm:text-sm"
+              >
+                <span className="font-mono font-medium text-white">{shortAddr(address)}</span>
+                <span className="text-accent/50">·</span>
+                <span className="font-semibold text-accent">Disconnect</span>
+              </button>
             ) : (
               <button
+                type="button"
                 className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-on-accent sm:px-4 sm:py-2 sm:text-sm"
                 onClick={() => void onConnect()}
               >
